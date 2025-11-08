@@ -1,31 +1,30 @@
-"""
-Lab 3.1 – Simple Datasets and Aggregates
+# Mehmet Taha Ünal - 231AMB077
+# Lab 3.1 – Simple Datasets and Aggregates
+# Goal: Work with lists and dictionaries, calculate aggregates
 
-Goals:
-- Create and manipulate Python lists and dictionaries.
-- Compute aggregates such as sum, average, max, and min.
+# --- 1. Create datasets ---
+temperatures = [5.2, 6.8, 4.9, 7.3, 8.0, 6.1, 5.5]  # °C for a week
+city_population = {
+    "Riga": 632_614,
+    "Vilnius": 593_425,
+    "Tallinn": 437_619,
+    "Kaunas": 312_120,
+    "Tartu": 91_783
+}
 
-Instructions:
-1. Create a list `temperatures` with daily temperatures for one week.
-2. Create a dictionary `city_population` with at least 5 cities and their populations.
-3. Compute:
-   - The average temperature.
-   - The maximum and minimum population.
-   - The total population of all cities.
-4. Print your results in a clear, formatted way.
-"""
+# --- 2. Compute aggregates ---
+average_temperature = sum(temperatures) / len(temperatures)
 
-# TODO: Create the datasets - up to you to fill in the data
-temperatures = []
-city_population = {}
+largest_city = max(city_population.keys(), key=lambda x: city_population[x])
+largest_population = city_population[largest_city]
 
-# TODO: Compute aggregates
-average_temperature = 0
-largest_city = ""
-largest_population = 0
-total_population = 0
+total_population = sum(city_population.values())
 
-# TODO: Print results
-print("Average temperature:", average_temperature)
-print("Largest city:", largest_city, "-", largest_population)
-print("Total population:", total_population)
+# --- 3. Print results ---
+print("------ Weekly Report ------")
+print(f"Average temperature: {average_temperature:.1f} °C")
+print(f"Largest city: {largest_city} ({largest_population:,} people)")
+print(f"Total population of all cities: {total_population:,}")
+print("----------------------------")
+
+

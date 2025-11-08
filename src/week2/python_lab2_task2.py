@@ -1,32 +1,23 @@
-"""
-Lab 3.2 – Comprehensions and Transformations
+# Mehmet Taha Ünal - 231AMB077
+# Lab 3.2 – Comprehensions and Transformations
+# Goal: Practice list, set, and dictionary comprehensions
 
-Goals:
-- Practice list, set, and dictionary comprehensions.
-- Transform and filter data concisely.
+import random
 
-Instructions:
-Given the list:
-    numbers = [3, 8, -2, 7, 0, -5, 10]
+# --- 1. Generate 10 random integers between -10 and 10 ---
+numbers = [random.randint(-10, 10) for _ in range(10)]
 
-1. Create a list `squares` with the square of each number.
-2. Create a list `positives` containing only positive numbers.
-3. Create a set `even_squares` of the squares of even numbers.
-4. Create a dictionary `cubes` mapping each number to its cube.
-5. Print all results.
-"""
+# --- 2. Implement comprehensions ---
+squares = [n ** 2 for n in numbers]
+positives = [n for n in numbers if n > 0]
+even_squares = {n ** 2 for n in numbers if n % 2 == 0}
+cubes = {n: n ** 3 for n in numbers}
 
-# Fill in your own numbers or generate 10 random integers
-numbers = []
-
-# TODO: Implement comprehensions
-squares = []
-positives = []
-even_squares = set()
-cubes = {}
-
-# TODO: Print results
+# --- 3. Print results ---
+print("------ Number Transformations ------")
+print("Original numbers:", numbers)
 print("Squares:", squares)
 print("Positives:", positives)
 print("Even squares:", even_squares)
 print("Cubes:", cubes)
+print("------------------------------------")
