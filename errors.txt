@@ -1,0 +1,8 @@
+Line 1: flight_id,origin,destination,departure_datetime,arrival_datetime,price → invalid flight_id, invalid origin code, invalid destination code, invalid departure datetime, invalid arrival datetime, invalid price
+Line 10: # === Invalid flights === → comment line, ignored
+Line 12: BADLINE,NO_DATE,NO_TIME → missing required fields
+Line 13: BA_BAD,RIX,LON,2025-11-15 11:00,INVALID_DATE,250.00 → invalid flight_id, invalid arrival datetime
+Line 14: SK404,OSL,RIX,2025-11-15 14:00,2025-11-15 12:00,120.00 → arrival before departure
+Line 16: QR1,DOH,SYD,INVALID_DATETIME,2025-11-17 23:30,980.00 → invalid departure datetime
+Line 17: KL1999,AMS,,2025-11-14 09:00,2025-11-14 11:15,180.00 → invalid destination code
+Line 18: AY503,HEL,RIX,2025-11-15 13:20,2025-11-15 14:15,-10.00 → negative or zero price value
