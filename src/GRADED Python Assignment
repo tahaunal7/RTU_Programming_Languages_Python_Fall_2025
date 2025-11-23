@@ -1,0 +1,125 @@
+# Mehmet Taha Ünal - 231AMB077
+# ----------------------------------------------------------
+# Python Flight Parser (6–7 Grade Version)
+#
+# Usage:
+#     python flight_parser.py -i path/to/file.csv
+#
+# Example:
+#     python flight_parser.py -i db.csv
+# python "src/GRADED Python Assignment" -i src/db.csv
+#
+# Description:
+#     Reads a CSV flight schedule file,
+#     validates each row,
+#     saves valid flights to db.json,
+#     and logs invalid rows to errors.txt.
+# ----------------------------------------------------------
+
+import csv
+import json
+import argparse
+from datetime import datetime
+
+
+def is_valid_flight_id(fid):
+    return fid.isalnum() and 2 <= len(fid) <= 8
+
+
+def is_valid_airport(code):
+    return len(code) == 3 and code.isalpha() and code.isupper()
+
+
+def is_valid_datetime(dt):
+    try:
+        datetime.strptime(dt, "%Y-%m-%d %H:%M")
+        return True
+    except:
+        return False
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-i", "--input", required=True)
+    args = parser.parse_args()
+
+    input_path = args.input
+
+    valid_flights = []
+    errors = []
+
+    with open(input_path, "r", encoding="utf-8") as f:
+        reader = csv.reader(f)
+        line_number = 0
+
+        for row in reader:
+            line_number += 1
+
+            if not row:
+                continue
+
+            if row[0].startswith("#"):
+                errors.append(f"Line {line_number}: {' '.join(row)} → comment line, ignored")
+                continue
+
+            if len(row) != 6:
+                errors.append(f"Line {line_number}: {','.join(row)} → missing required fields")
+                continue
+
+            fid, origin, dest, dep_dt, arr_dt, price = row
+            problems = []
+
+            if not is_valid_flight_id(fid):
+                problems.append("invalid flight_id")
+
+            if not is_valid_airport(origin):
+                problems.append("invalid origin code")
+
+            if not is_valid_airport(dest):
+                problems.append("invalid destination code")
+
+            if not is_valid_datetime(dep_dt):
+                problems.append("invalid departure datetime")
+
+            if not is_valid_datetime(arr_dt):
+                problems.append("invalid arrival datetime")
+
+            if is_valid_datetime(dep_dt) and is_valid_datetime(arr_dt):
+                dt_dep = datetime.strptime(dep_dt, "%Y-%m-%d %H:%M")
+                dt_arr = datetime.strptime(arr_dt, "%Y-%m-%d %H:%M")
+                if dt_arr <= dt_dep:
+                    problems.append("arrival before departure")
+
+            try:
+                price_val = float(price)
+                if price_val <= 0:
+                    problems.append("negative or zero price value")
+            except:
+                problems.append("invalid price")
+
+            if len(problems) == 0:
+                valid_flights.append({
+                    "flight_id": fid,
+                    "origin": origin,
+                    "destination": dest,
+                    "departure_datetime": dep_dt,
+                    "arrival_datetime": arr_dt,
+                    "price": float(price)
+                })
+            else:
+                errors.append(f"Line {line_number}: {','.join(row)} → " + ", ".join(problems))
+
+    with open("db.json", "w", encoding="utf-8") as f:
+        json.dump(valid_flights, f, indent=2)
+
+    with open("errors.txt", "w", encoding="utf-8") as f:
+        for e in errors:
+            f.write(e + "\n")
+
+    print("Parsing completed.")
+    print(f"Valid flights saved to db.json ({len(valid_flights)} flights)")
+    print(f"Errors saved to errors.txt ({len(errors)} issues)")
+
+
+if __name__ == "__main__":
+    main()
